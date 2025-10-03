@@ -8,7 +8,8 @@
       "version": "1.1",
       "author": "DevTeam",
       "url": "https://example.com/downloads/pixel_runner_v1.1.zip",
-      "icon": "LV_SYMBOL_IMAGE"
+      "icon": "LV_SYMBOL_IMAGE",
+      "size_mb": 150.5
     },
     {
       "name": "Starship Defender",
@@ -16,7 +17,8 @@
       "version": "1.0",
       "author": "Astro Coder",
       "url": "https://example.com/downloads/starship_defender.zip",
-      "icon": "LV_SYMBOL_GPS"
+      "icon": "LV_SYMBOL_GPS",
+      "size_mb": 225.0
     },
     {
       "name": "Tetris Clone",
@@ -24,7 +26,8 @@
       "version": "1.2",
       "author": "Hobbyist Dev",
       "url": "https://example.com/downloads/tetris_clone_1.2.zip",
-      "icon": "LV_SYMBOL_EDIT"
+      "icon": "LV_SYMBOL_EDIT",
+      "size_mb": 50.2
     }
   ]
 }

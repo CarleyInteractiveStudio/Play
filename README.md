@@ -8,9 +8,12 @@ Este repositorio contiene el código fuente para un **prototipo funcional de la 
 
 ### Funcionalidades Implementadas:
 *   Una interfaz de usuario con un estilo inspirado en PlayStation.
-*   Una lista de juegos (con datos de ejemplo).
-*   Una "Play Store" que lee y muestra dinámicamente el contenido del archivo `catalog.json`.
-*   Navegación entre la pantalla principal y la tienda.
+*   Una lista de juegos y una tienda que se cargan dinámicamente desde `catalog.json`.
+*   Un **Gestor de Aplicaciones** completamente funcional que:
+    *   Calcula y muestra el uso de almacenamiento real basado en los datos del catálogo.
+    *   Permite la **desinstalación persistente** de aplicaciones, actualizando el archivo `catalog.json` en el disco.
+*   Una pantalla de "Ajustes" con widgets de ejemplo.
+*   Navegación completa entre todas las pantallas.
 
 ### Funcionalidades NO Implementadas (Demostrativas):
 *   **Lanzamiento de juegos:** Al hacer clic en un juego, no ocurrirá nada.

@@ -4,8 +4,17 @@
  */
 
 #include "settings.h"
+#include "app_manager.h" // Incluimos el nuevo gestor de aplicaciones.
 
 // --- MANEJADORES DE EVENTOS ---
+
+/**
+ * @brief Manejador de eventos para el botón del gestor de aplicaciones.
+ */
+static void app_manager_button_event_handler(lv_event_t *e)
+{
+    app_manager_show_screen();
+}
 
 /**
  * @brief Manejador de eventos para el botón "Atrás" de la pantalla de ajustes.
@@ -63,6 +72,16 @@ void settings_show_screen(void)
     lv_obj_set_style_pad_top(sound_label, 15, LV_PART_MAIN);
 
     lv_obj_t *sound_switch = lv_switch_create(cont);
+
+    // --- Botón para el Gestor de Aplicaciones ---
+    lv_obj_t *app_manager_btn = lv_btn_create(cont);
+    lv_obj_set_width(app_manager_btn, lv_pct(90));
+    lv_obj_set_style_pad_top(app_manager_btn, 20, LV_PART_MAIN);
+
+    lv_obj_t *app_manager_label = lv_label_create(app_manager_btn);
+    lv_label_set_text(app_manager_label, "Gestionar Aplicaciones");
+    lv_obj_center(app_manager_label);
+    lv_obj_add_event_cb(app_manager_btn, app_manager_button_event_handler, LV_EVENT_CLICKED, NULL);
 
     // Crear un botón de "Atrás"
     lv_obj_t *back_btn = lv_btn_create(screen);

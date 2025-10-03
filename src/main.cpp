@@ -13,6 +13,7 @@
 #include "lv_drivers/display/sdl.h" // Usaremos el backend de SDL2.
 #include <unistd.h>
 #include "ui.h"                     // Incluimos nuestro propio módulo de UI.
+#include "data_manager.h"           // Incluimos el gestor de datos.
 
 // --- DEFINICIONES ---
 // Las resoluciones ahora se tomarán de la configuración de SDL.
@@ -21,8 +22,9 @@
 // --- FUNCIÓN PRINCIPAL ---
 int main(void)
 {
-    // 1. Inicializar la biblioteca LVGL
+    // 1. Inicializar la biblioteca LVGL y el gestor de datos
     lv_init();
+    data_manager_load_data(); // Cargar los datos de las apps al inicio
 
     // 2. Inicializar SDL y los drivers de LVGL para SDL.
     // sdl_init() crea la ventana y el renderizador de SDL.
