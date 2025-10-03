@@ -1,0 +1,30 @@
+{
+  "repository_name": "Play OS Store - Catálogo Principal",
+  "version": "1.0",
+  "items": [
+    {
+      "name": "Pixel Runner",
+      "description": "Un juego de plataformas clásico de 8 bits.",
+      "version": "1.1",
+      "author": "DevTeam",
+      "url": "https://example.com/downloads/pixel_runner_v1.1.zip",
+      "icon": "LV_SYMBOL_IMAGE"
+    },
+    {
+      "name": "Starship Defender",
+      "description": "Defiende la galaxia en este shooter espacial.",
+      "version": "1.0",
+      "author": "Astro Coder",
+      "url": "https://example.com/downloads/starship_defender.zip",
+      "icon": "LV_SYMBOL_GPS"
+    },
+    {
+      "name": "Tetris Clone",
+      "description": "Un clon del clásico juego de puzle.",
+      "version": "1.2",
+      "author": "Hobbyist Dev",
+      "url": "https://example.com/downloads/tetris_clone_1.2.zip",
+      "icon": "LV_SYMBOL_EDIT"
+    }
+  ]
+}
