@@ -91,7 +91,7 @@ void store_show_screen(void)
 
     // Crear un título
     lv_obj_t *label = lv_label_create(screen);
-    lv_label_set_text(label, "Play Store");
+    lv_label_set_text(label, "Game Store");
     lv_obj_set_style_text_color(label, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
     lv_obj_set_style_text_font(label, &lv_font_montserrat_22, LV_PART_MAIN);
     lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 10);

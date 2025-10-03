@@ -5,6 +5,7 @@
 
 #include "ui.h"
 #include "store.h" // Incluimos la tienda para poder llamarla.
+#include "settings.h" // Incluimos los ajustes para poder llamarlos.
 
 // --- DATOS DE EJEMPLO ---
 // Para este prototipo de PC, usamos una lista de juegos de ejemplo.
@@ -32,6 +33,16 @@ const char *sample_games[] = {
 static void store_button_event_handler(lv_event_t *e)
 {
     store_show_screen();
+}
+
+/**
+ * @brief Manejador de eventos para el botón de ajustes.
+ *
+ * Llama a la función que muestra la pantalla de ajustes.
+ */
+static void settings_button_event_handler(lv_event_t *e)
+{
+    settings_show_screen();
 }
 
 // --- IMPLEMENTACIÓN DE FUNCIONES ---
@@ -69,12 +80,22 @@ void ui_create_game_list(lv_obj_t *parent)
         lv_obj_set_style_text_color(btn, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
     }
 
-    // Añadir un separador y el botón de la tienda
+    // Añadir un separador y los botones de sistema
     lv_list_add_text(list, "Sistema");
-    lv_obj_t *store_btn = lv_list_add_btn(list, LV_SYMBOL_DOWNLOAD, "Play Store");
+
+    // Botón de la Tienda
+    lv_obj_t *store_btn = lv_list_add_btn(list, LV_SYMBOL_DOWNLOAD, "Game Store");
     lv_obj_set_style_bg_color(store_btn, lv_color_hex(0x000030), LV_PART_MAIN);
     lv_obj_set_style_bg_color(store_btn, lv_color_hex(0x404080), LV_STATE_FOCUSED);
     lv_obj_set_style_border_width(store_btn, 0, LV_PART_MAIN);
     lv_obj_set_style_text_color(store_btn, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
     lv_obj_add_event_cb(store_btn, store_button_event_handler, LV_EVENT_CLICKED, NULL);
+
+    // Botón de Ajustes
+    lv_obj_t *settings_btn = lv_list_add_btn(list, LV_SYMBOL_SETTINGS, "Ajustes");
+    lv_obj_set_style_bg_color(settings_btn, lv_color_hex(0x000030), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(settings_btn, lv_color_hex(0x404080), LV_STATE_FOCUSED);
+    lv_obj_set_style_border_width(settings_btn, 0, LV_PART_MAIN);
+    lv_obj_set_style_text_color(settings_btn, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
+    lv_obj_add_event_cb(settings_btn, settings_button_event_handler, LV_EVENT_CLICKED, NULL);
 }
