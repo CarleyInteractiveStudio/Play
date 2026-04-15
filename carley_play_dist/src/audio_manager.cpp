@@ -14,9 +14,14 @@ static const uint8_t click_sfx[] = {
 
 static int current_volume = 70;
 
+#define I2S_BASE 0x10200000
+#define I2S_TX_CTRL (I2S_BASE + 0x0004)
+
 void audio_init(void)
 {
-    // Habilitar controlador de audio
+    // Configurar I2S para HDMI
+    RK_REG(CRU_CLKGATE_CON(1)) &= ~(1 << 5); // Habilitar reloj I2S
+    RK_REG(I2S_TX_CTRL) = 0x03; // Habilitar transmisión
 }
 
 void audio_play_click(void)
