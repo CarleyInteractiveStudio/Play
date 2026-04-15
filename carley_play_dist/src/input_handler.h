@@ -31,6 +31,6 @@ lv_group_t* cp_input_get_group(void);
 /**
  * @brief Función que LVGL llamará periódicamente para leer el mando.
  */
-void cp_gamepad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
+void cp_gamepad_read(lv_indev_t * indev, lv_indev_data_t * data);
 
 #endif // INPUT_HANDLER_H

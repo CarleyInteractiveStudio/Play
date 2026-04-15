@@ -1,57 +1,34 @@
-/**
- * @file data_manager.h
- * @brief Declaraciones para el gestor de datos de aplicaciones.
- *
- * Este módulo se encarga de cargar, gestionar y guardar la lista de
- * aplicaciones desde y hacia el archivo `catalog.json`.
- */
-
 #ifndef DATA_MANAGER_H
 #define DATA_MANAGER_H
 
-#include <string>
-#include <vector>
-
-// Estructura para almacenar los datos de una aplicación.
-struct AppData {
-    std::string name;
-    std::string description;
-    std::string version;
-    std::string author;
-    std::string url;
-    std::string icon;
-    float size_mb; // Tamaño en megabytes para el cálculo de almacenamiento.
-};
-
-// --- FUNCIONES PÚBLICAS ---
+#include "catalog_data.h"
 
 /**
- * @brief Carga los datos de las aplicaciones desde el archivo catalog.json.
- *
- * Debe llamarse una vez al inicio del programa.
- * @return true si la carga fue exitosa, false en caso contrario.
+ * @file data_manager.h
+ * @brief Gestión de datos de aplicaciones para Bare Metal.
  */
-bool data_manager_load_data();
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
- * @brief Obtiene la lista de todas las aplicaciones cargadas.
- *
- * @return Una referencia constante al vector de aplicaciones.
+ * @brief Inicializa los datos del sistema.
  */
-const std::vector<AppData>& data_manager_get_apps();
+void data_manager_load_data(void);
 
 /**
- * @brief Elimina una aplicación de la lista por su índice.
- *
- * @param index El índice de la aplicación a eliminar.
+ * @brief Obtiene la lista de aplicaciones instaladas.
  */
-void data_manager_delete_app(int index);
+const cp_app_t* data_manager_get_apps(int* count);
 
 /**
- * @brief Guarda el estado actual de la lista de aplicaciones en catalog.json.
- *
- * @return true si el guardado fue exitoso, false en caso contrario.
+ * @brief Calcula el espacio usado en MB.
  */
-bool data_manager_save_data();
+int data_manager_get_used_storage(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // DATA_MANAGER_H

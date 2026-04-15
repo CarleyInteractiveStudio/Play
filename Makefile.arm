@@ -13,7 +13,7 @@ CFLAGS = $(ARCH_FLAGS) $(OPTIMIZATION) -I. -I./src -I./lvgl -Wall
 CXXFLAGS = $(CFLAGS) -std=c++11 -fno-exceptions -fno-rtti
 
 # Enlazado (Bare Metal - Ajustar según el mapa de memoria del kernel)
-LDFLAGS = -Wl,--gc-sections -nostartfiles
+LDFLAGS = -Wl,--gc-sections -nostartfiles -T link.ld
 
 # Archivos de Fuente
 LVGL_DIR = lvgl
@@ -22,7 +22,7 @@ include $(LVGL_DIR)/lvgl.mk
 SRC_FILES = $(CSRCS) $(CPPSRCS)
 SRC_FILES += src/main.cpp src/ui.cpp src/data_manager.cpp src/splash.cpp \
              src/store.cpp src/settings.cpp src/app_manager.cpp src/cJSON.c \
-             src/input_handler.cpp
+             src/input_handler.cpp src/kernel.c
 
 OBJ_FILES = $(SRC_FILES:.cpp=.o)
 OBJ_FILES := $(OBJ_FILES:.c=.o)

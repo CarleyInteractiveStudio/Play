@@ -3,7 +3,8 @@
  * @brief Punto de entrada principal para "Play OS" en hardware real (Bare Metal).
  *
  * Este archivo inicializa LVGL y configura el dibujo directamente en el
- * Framebuffer proporcionado por el kernel del Carley Play.
+ * Pantalla proporcionado por el kernel del Carley Play.
+ * Compatible con LVGL v9.
  */
 
 #include "lvgl/lvgl.h"
@@ -15,27 +16,11 @@
 // --- CONFIGURACIÓN DE HARDWARE ---
 #define SCREEN_WIDTH  1280
 #define SCREEN_HEIGHT 720
-#define DISP_BUF_SIZE (SCREEN_WIDTH * 10) // Buffer de 10 líneas
 
 // --- PROTOTIPOS PARA EL KERNEL ---
-// Estas funciones deben ser proporcionadas por el kernel o implementadas por el usuario.
 extern "C" {
-    void kernel_draw_pixel(int32_t x, int32_t y, lv_color_t color);
-    void kernel_flush_area(int32_t x1, int32_t y1, int32_t x2, int32_t y2, lv_color_t * color_p);
+    void kernel_flush_area(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map);
     void kernel_init_video(void);
-}
-
-// --- CALLBACK DE FLUSH PARA LVGL ---
-/**
- * @brief Envía los datos renderizados por LVGL al Framebuffer del hardware.
- */
-static void my_disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
-{
-    // Llama a la función del kernel para copiar los píxeles al buffer de video real
-    kernel_flush_area(area->x1, area->y1, area->x2, area->y2, color_p);
-
-    // Indica a LVGL que el refresco ha terminado
-    lv_disp_flush_ready(disp_drv);
 }
 
 // --- FUNCIONES DE TRANSICIÓN ---
@@ -56,21 +41,18 @@ int main(void)
     lv_init();
     data_manager_load_data();
 
-    // 3. Configurar Buffer de Pantalla
-    static lv_color_t buf[DISP_BUF_SIZE];
-    static lv_disp_draw_buf_t draw_buf;
-    lv_disp_draw_buf_init(&draw_buf, buf, NULL, DISP_BUF_SIZE);
+    // 3. Crear Pantalla (Display) para LVGL v9
+    lv_display_t * disp = lv_display_create(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    // 4. Configurar Driver de Pantalla
-    static lv_disp_drv_t disp_drv;
-    lv_disp_drv_init(&disp_drv);
-    disp_drv.hor_res = SCREEN_WIDTH;
-    disp_drv.ver_res = SCREEN_HEIGHT;
-    disp_drv.flush_cb = my_disp_flush;
-    disp_drv.draw_buf = &draw_buf;
-    lv_disp_drv_register(&disp_drv);
+    // Configurar el buffer de dibujo (LVGL v9 maneja la memoria internamente o podemos pasarle una)
+    // Usaremos memoria estática para Bare Metal
+    static uint8_t buf1[SCREEN_WIDTH * 10 * 4]; // 10 líneas
+    lv_display_set_buffers(disp, buf1, NULL, sizeof(buf1), LV_DISPLAY_RENDER_MODE_PARTIAL);
 
-    // 4b. Inicializar Entrada (Mandos)
+    // Configurar el callback de refresco
+    lv_display_set_flush_cb(disp, kernel_flush_area);
+
+    // 4. Inicializar Entrada (Mandos)
     cp_input_init();
 
     // 5. Mostrar Splash Screen
@@ -84,7 +66,6 @@ int main(void)
     while(1) {
         lv_timer_handler();
         // En Bare Metal, el retardo depende de la implementación del kernel
-        // pero usaremos una pequeña espera si el kernel lo permite.
         for(volatile int i = 0; i < 10000; i++);
     }
 
