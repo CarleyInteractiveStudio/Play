@@ -1,4 +1,4 @@
-/* Linker Script para Carley Play (Ejemplo genérico para ARM926) */
+/* Linker Script para Carley Play (ARM926EJ-S) */
 
 ENTRY(_start)
 
@@ -9,8 +9,11 @@ MEMORY
 
 SECTIONS
 {
+    . = 0x00000000;
+
     .text :
     {
+        *(.vectors)
         *(.text*)
         *(.rodata*)
     } > RAM
@@ -22,14 +25,18 @@ SECTIONS
 
     .bss :
     {
+        . = ALIGN(4);
+        __bss_start = .;
         *(.bss*)
         *(COMMON)
+        . = ALIGN(4);
+        __bss_end = .;
     } > RAM
 
     .stack :
     {
         . = ALIGN(8);
-        . = . + 0x4000; /* 16KB de Stack */
+        . = . + 0x4000; /* 16KB stack */
         _stack_top = .;
     } > RAM
 }

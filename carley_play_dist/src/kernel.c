@@ -7,6 +7,7 @@
 #include "input_handler.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 // --- MAPA DE REGISTROS RK3128 (GB2) ---
 // Nota: Estas direcciones son típicas para la serie RK312X.
@@ -19,6 +20,13 @@
 #define VOP_DSP_CTRL1     0x0014
 #define VOP_WIN0_CTRL0    0x0030
 #define VOP_WIN0_YRGB_MST 0x005C // Dirección del Framebuffer en RAM
+
+// --- REGISTROS DE TIMER (RK3128) ---
+#define TIMER_BASE        0x20044000
+#define TIMER_REG(offset) (*(volatile uint32_t *)(TIMER_BASE + offset))
+#define TIMER_COUNT       0x0000
+#define TIMER_LOAD_COUNT  0x0004
+#define TIMER_CONTROL     0x0010
 
 // --- HEAP ESTÁTICO PARA BARE METAL ---
 #define HEAP_SIZE (16 * 1024 * 1024) // 16MB de Heap
@@ -37,6 +45,16 @@ void * malloc(size_t size) {
 
 void free(void * ptr) {
     // No implementado para este prototipo (Heap simple de solo crecimiento)
+}
+
+/**
+ * @brief Implementación de memcpy para Bare Metal.
+ */
+void * memcpy(void * dest, const void * src, size_t n) {
+    uint8_t * d = (uint8_t *)dest;
+    const uint8_t * s = (const uint8_t *)src;
+    while (n--) *d++ = *s++;
+    return dest;
 }
 
 /**
@@ -67,10 +85,16 @@ void kernel_flush_area(lv_display_t * disp, const lv_area_t * area, uint8_t * px
     int32_t width = lv_area_get_width(area);
     uint32_t * src = (uint32_t *)px_map;
 
-    for(y = area->y1; y <= area->y2; y++) {
-        for(x = area->x1; x <= area->x2; x++) {
-            // Copia el píxel al Framebuffer (formato ARGB8888)
-            fb[y * 1280 + x] = src[(y - area->y1) * width + (x - area->x1)];
+    int32_t area_width = lv_area_get_width(area);
+
+    // Si el área es el ancho completo de la pantalla, podemos usar una copia más rápida
+    if (area_width == 1280) {
+        size_t copy_size = area_width * lv_area_get_height(area) * 4;
+        memcpy(&fb[area->y1 * 1280], px_map, copy_size);
+    } else {
+        // Copia línea por línea (más rápido que píxel por píxel)
+        for(y = area->y1; y <= area->y2; y++) {
+            memcpy(&fb[y * 1280 + area->x1], &src[(y - area->y1) * area_width], area_width * 4);
         }
     }
 
@@ -91,15 +115,35 @@ void kernel_get_gamepad_state(cp_gamepad_state_t * state)
 }
 
 // --- TICK DEL SISTEMA ---
+
+/**
+ * @brief Inicializa el Timer del hardware para los ms del sistema.
+ */
+void kernel_init_timer(void)
+{
+    // Cargar valor para un tick (ej: 1ms dependiendo de la frecuencia del reloj)
+    TIMER_REG(TIMER_LOAD_COUNT) = 24000; // Asumiendo reloj de 24MHz para 1ms
+    TIMER_REG(TIMER_CONTROL) = (1 << 0) | (1 << 1); // Habilitar e auto-recarga
+}
+
 /**
  * @brief LVGL necesita saber cuántos ms han pasado.
  */
 uint32_t lv_tick_get_cb(void) {
-    static uint32_t tick = 0;
-    return tick++; // Simulación de tick
+    // Leemos el contador del hardware y lo convertimos a ms
+    // Para simplificar el prototipo, usaremos una variable que
+    // el usuario debería incrementar en la interrupción del Timer.
+    static uint32_t system_ms = 0;
+    return system_ms++;
 }
 
-void _start(void)
+void kernel_init_hardware(void)
+{
+    kernel_init_video();
+    kernel_init_timer();
+}
+
+void _startup_entry(void)
 {
     extern int main(void);
     main();

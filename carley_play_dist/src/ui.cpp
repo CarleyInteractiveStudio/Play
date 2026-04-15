@@ -3,14 +3,17 @@
 #include "settings.h"
 #include "data_manager.h"
 #include "input_handler.h"
+#include "audio_manager.h"
 
 static void store_button_event_handler(lv_event_t * e)
 {
+    audio_play_click();
     store_show_screen();
 }
 
 static void settings_button_event_handler(lv_event_t * e)
 {
+    audio_play_click();
     settings_show_screen();
 }
 

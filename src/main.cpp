@@ -20,7 +20,7 @@
 // --- PROTOTIPOS PARA EL KERNEL ---
 extern "C" {
     void kernel_flush_area(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map);
-    void kernel_init_video(void);
+    void kernel_init_hardware(void);
 }
 
 // --- FUNCIONES DE TRANSICIÓN ---
@@ -34,8 +34,8 @@ static void load_main_menu_cb(lv_timer_t * timer)
 // --- FUNCIÓN PRINCIPAL ---
 int main(void)
 {
-    // 1. Inicializar Hardware (Video)
-    kernel_init_video();
+    // 1. Inicializar Hardware (Video, Timers, etc.)
+    kernel_init_hardware();
 
     // 2. Inicializar LVGL
     lv_init();
