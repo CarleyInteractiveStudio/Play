@@ -1,17 +1,15 @@
-# Carley Play OS - Native Game Engine Edition (v2.0)
+# Carley Play OS v2.5 - "Persistence & Power"
 
-Este paquete convierte el hardware en una plataforma de desarrollo de juegos nativos.
+Esta actualización permite que la consola sea útil para juegos largos y potentes.
 
-## Novedades de la Versión 2.0:
-1.  **Nuevo Dashboard:** Interfaz con diseño propio (no PlayStation). Iconos dinámicos, descripciones y leyendas de controles.
-2.  **Audio HDMI:** Driver I2S real para salida de sonido digital por televisión.
-3.  **Ejecución Nativa:** El sistema puede cargar binarios directos desde la SD a la RAM y ejecutarlos.
-4.  **SDK para Desarrolladores:** Se incluye `cp_sdk.h` para que crees tus propios juegos 2D/3D optimizados.
+## Novedades de la Versión 2.5:
+1.  **Escritura en SD:** Ahora la consola puede guardar datos en la tarjeta SD. Tus juegos nativos pueden implementar sistemas de guardado de partidas.
+2.  **Gestión de Configuración:** Los ajustes de volumen, idioma y brillo ahora se guardan automáticamente en `system.cfg`.
+3.  **GPU Mali-400:** Primeros drivers para encender la GPU Mali del RK3128. Preparado para juegos con gráficos 3D.
+4.  **Gestión de VRAM:** Sistema de reserva de memoria de video para texturas y polígonos.
 
-## Cómo crear juegos para Carley Play:
-1.  Incluye `cp_sdk.h` en tu proyecto de C.
-2.  Usa la dirección `0x01000000` para dibujar en el Framebuffer.
-3.  Compila tu juego como un binario plano (`.bin`) y ponlo en tu tarjeta SD.
+## SDK Actualizado:
+Se han añadido funciones al `cp_sdk.h` para que los desarrolladores puedan usar el sistema de guardado y la GPU.
 
 ---
 **Desarrollado para CP - Carley Play**

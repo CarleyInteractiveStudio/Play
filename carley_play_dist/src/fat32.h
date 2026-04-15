@@ -31,4 +31,14 @@ int fat32_open(const char* filename, fat_file_t* file);
  */
 int fat32_read(fat_file_t* file, uint32_t offset, uint32_t size, uint8_t* buffer);
 
+/**
+ * @brief Crea un archivo nuevo o sobrescribe uno existente.
+ */
+int fat32_create(const char* filename);
+
+/**
+ * @brief Escribe datos en un archivo.
+ */
+int fat32_write(fat_file_t* file, uint32_t offset, uint32_t size, const uint8_t* buffer);
+
 #endif // FAT32_H

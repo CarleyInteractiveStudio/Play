@@ -58,4 +58,9 @@
 #define RTC_READ_TIME     (RTC_BASE + 0x0004)
 #define RTC_CTRL          (RTC_BASE + 0x0010)
 
+// --- Mali-400 GPU ---
+#define MALI_BASE         0x10090000
+#define MALI_GPU_ID       (MALI_BASE + 0x0000)
+#define MALI_L2_CACHE_BASE (MALI_BASE + 0x0010)
+
 #endif // RK3128_REGS_H

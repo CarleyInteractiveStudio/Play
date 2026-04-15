@@ -25,7 +25,7 @@ SRC_FILES += src/main.cpp src/ui.cpp src/data_manager.cpp src/splash.cpp \
              src/input_handler.cpp src/kernel.c src/audio_manager.cpp \
              src/startup.s src/localization.cpp src/sdmmc.c src/usb_gamepad.c \
              src/fat32.cpp src/loader.cpp src/uart.c src/gic.c src/rga.c \
-             src/file_explorer.cpp
+             src/file_explorer.cpp src/config_manager.cpp src/gpu_mali.cpp
 
 OBJ_FILES = $(SRC_FILES:.cpp=.o)
 OBJ_FILES := $(OBJ_FILES:.c=.o)

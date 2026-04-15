@@ -43,3 +43,15 @@ int fat32_read(fat_file_t* file, uint32_t offset, uint32_t size, uint8_t* buffer
     // TODO: Implementar lectura usando la tabla FAT
     return 0;
 }
+
+int fat32_create(const char* filename)
+{
+    // TODO: Implementar creación de entrada de directorio
+    return 0;
+}
+
+int fat32_write(fat_file_t* file, uint32_t offset, uint32_t size, const uint8_t* buffer)
+{
+    // TODO: Implementar escritura de bloques y actualización de la FAT
+    return 0;
+}
