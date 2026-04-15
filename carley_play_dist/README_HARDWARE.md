@@ -1,18 +1,15 @@
-# Carley Play (Play OS) - Release Bare Metal v1.0
+# Carley Play (Play OS) - Release Bare Metal v1.2 "Dynamic Kernel"
 
-Este paquete contiene el sistema operativo **Play OS** totalmente preparado para el hardware **Carley Play** (Game Stick 4k Lite B-1).
+Esta versión convierte el núcleo en un sistema dinámico y real:
 
-## Cambios Realizados para Bare Metal:
-1.  **Sin Dependencias de SO:** Se han eliminado `std::vector`, `std::string` y lectura de archivos. El código es C/C++ puro compatible con Bare Metal.
-2.  **Datos Embebidos:** El catálogo de juegos está incluido directamente en el binario (`src/catalog_data.h`).
-3.  **Gestor de Memoria:** Se ha incluido un `malloc` básico en `src/kernel.c` que utiliza un heap estático de 16MB.
-4.  **Resolución HD:** Configurado a 1280x720 para salida HDMI.
-5.  **Mando:** Soporte de navegación por grupos habilitado.
+## Nuevas Funcionalidades Reales:
+1.  **Filesystem (FAT32):** Lector de archivos real para tarjetas SD. Puede buscar particiones y abrir archivos.
+2.  **Memoria Dinámica:** Gestor de memoria con `malloc` y `free` para manejar los 256MB de la consola.
+3.  **Reloj Real (RTC):** Acceso al reloj de hardware del RK3128.
+4.  **Optimización de Velocidad:** Configuración de relojes (CRU) para máximo rendimiento.
 
-## Cómo empezar:
-1.  **Drivers de Video:** Abre `src/kernel.c` e implementa la función `kernel_flush_area`. Debes copiar el `px_map` a la dirección de memoria de tu Framebuffer.
-2.  **Drivers de Mando:** En `src/kernel.c`, implementa `kernel_get_gamepad_state` para leer los botones de tu driver USB.
-3.  **Compilar:** Ejecuta `make`. El resultado será un archivo `play_os.bin`.
+## Cómo usar:
+El código fuente está en la carpeta `src`. Al compilar con `make`, obtendrás el binario para tu Game Stick.
 
 ---
 **Desarrollado para CP - Carley Play**
