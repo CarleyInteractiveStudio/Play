@@ -34,6 +34,14 @@ static uint8_t heap[HEAP_SIZE];
 static size_t heap_ptr = 0;
 
 /**
+ * @brief Obtiene la cantidad de RAM libre en el Heap.
+ */
+uint32_t kernel_get_free_ram(void)
+{
+    return HEAP_SIZE - heap_ptr;
+}
+
+/**
  * @brief Implementación básica de malloc para Bare Metal.
  */
 void * malloc(size_t size) {
