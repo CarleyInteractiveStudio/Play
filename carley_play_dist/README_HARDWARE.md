@@ -1,15 +1,15 @@
-# Carley Play (Play OS) - Release Bare Metal v1.2 "Dynamic Kernel"
+# Carley Play (Play OS) - Release Bare Metal v1.5 "Core Engine"
 
-Esta versión convierte el núcleo en un sistema dinámico y real:
+Esta versión completa el núcleo funcional de la consola **Carley Play** para el hardware **RK3128**.
 
-## Nuevas Funcionalidades Reales:
-1.  **Filesystem (FAT32):** Lector de archivos real para tarjetas SD. Puede buscar particiones y abrir archivos.
-2.  **Memoria Dinámica:** Gestor de memoria con `malloc` y `free` para manejar los 256MB de la consola.
-3.  **Reloj Real (RTC):** Acceso al reloj de hardware del RK3128.
-4.  **Optimización de Velocidad:** Configuración de relojes (CRU) para máximo rendimiento.
+## Drivers Críticos Implementados:
+1.  **SDMMC Completo:** Lectura real de sectores desde la Micro SD.
+2.  **USB Host HID:** Soporte para detectar mandos inalámbricos por USB.
+3.  **Lanzador de Juegos (Loader):** Sistema que carga un binario de la SD a la RAM y lo ejecuta.
+4.  **Depuración UART:** Puerto serie activo a 115200 baudios para ver los registros del sistema.
 
-## Cómo usar:
-El código fuente está en la carpeta `src`. Al compilar con `make`, obtendrás el binario para tu Game Stick.
+## Integración:
+Este código permite que la consola sea autónoma. Al compilar y arrancar, el sistema inicializa todo el hardware y queda listo para cargar juegos desde la tarjeta SD.
 
 ---
 **Desarrollado para CP - Carley Play**

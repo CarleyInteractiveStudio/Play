@@ -114,8 +114,13 @@ uint32_t lv_tick_get_cb(void) {
     return ms++;
 }
 
+extern void uart_init(void);
+extern void uart_print(const char* s);
+
 void kernel_init_hardware(void) {
     kernel_init_system();
+    uart_init();
+    uart_print("Carley Play OS Booting...\n");
     kernel_init_video();
     kernel_init_timer();
     RK_REG(0x2003c010) |= 1;
