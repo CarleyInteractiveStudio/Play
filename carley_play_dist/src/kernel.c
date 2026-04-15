@@ -6,6 +6,7 @@
 #include "lvgl/lvgl.h"
 #include "input_handler.h"
 #include "rk3128_regs.h"
+#include "kernel.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
@@ -53,7 +54,13 @@ void free(void * ptr) {
     if(!ptr) return;
     block_header_t *header = (block_header_t *)((uint8_t *)ptr - sizeof(block_header_t));
     header->free = 1;
-    // TODO: Coalesce adjacent free blocks
+}
+
+char * strdup(const char * s) {
+    size_t len = strlen(s) + 1;
+    char * d = (char *)malloc(len);
+    if (d) memcpy(d, s, len);
+    return d;
 }
 
 uint32_t kernel_get_free_ram(void) {
