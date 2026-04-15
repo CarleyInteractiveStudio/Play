@@ -6,6 +6,19 @@
 #include "lvgl/lvgl.h"
 #include "input_handler.h"
 #include <stddef.h>
+#include <stdint.h>
+
+// --- MAPA DE REGISTROS RK3128 (GB2) ---
+// Nota: Estas direcciones son típicas para la serie RK312X.
+// Deben verificarse con el manual técnico específico del GB2.
+#define VOP_BASE          0x10128000
+#define VOP_REG(offset)   (*(volatile uint32_t *)(VOP_BASE + offset))
+
+#define VOP_SYS_CTRL      0x0000
+#define VOP_DSP_CTRL0     0x0010
+#define VOP_DSP_CTRL1     0x0014
+#define VOP_WIN0_CTRL0    0x0030
+#define VOP_WIN0_YRGB_MST 0x005C // Dirección del Framebuffer en RAM
 
 // --- HEAP ESTÁTICO PARA BARE METAL ---
 #define HEAP_SIZE (16 * 1024 * 1024) // 16MB de Heap
@@ -27,19 +40,40 @@ void free(void * ptr) {
 }
 
 /**
- * @brief Inicializa el hardware de video (Placeholder).
+ * @brief Inicializa el hardware de video.
+ * Configura el VOP (Video Output Processor) para apuntar a nuestro Framebuffer.
  */
+#define FB_ADDR 0x01000000 // Dirección sugerida para el Framebuffer en los 256MB de RAM
 void kernel_init_video(void)
 {
-    // Aquí irían los registros del RK3128 para HDMI
+    // 1. Habilitar el VOP
+    VOP_REG(VOP_SYS_CTRL) |= (1 << 0);
+
+    // 2. Configurar la dirección base de la imagen (Win0)
+    VOP_REG(VOP_WIN0_YRGB_MST) = FB_ADDR;
+
+    // 3. Activar cambios
+    VOP_REG(VOP_SYS_CTRL) |= (1 << 31); // Config Done
 }
 
 /**
- * @brief Envía el buffer de píxeles a la pantalla real (Placeholder).
+ * @brief Envía el buffer de píxeles a la pantalla real.
+ * Copia los píxeles renderizados por LVGL a la memoria de video (FB_ADDR).
  */
 void kernel_flush_area(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map)
 {
-    // Aquí iría la copia al Framebuffer real
+    uint32_t * fb = (uint32_t *)FB_ADDR;
+    int32_t x, y;
+    int32_t width = lv_area_get_width(area);
+    uint32_t * src = (uint32_t *)px_map;
+
+    for(y = area->y1; y <= area->y2; y++) {
+        for(x = area->x1; x <= area->x2; x++) {
+            // Copia el píxel al Framebuffer (formato ARGB8888)
+            fb[y * 1280 + x] = src[(y - area->y1) * width + (x - area->x1)];
+        }
+    }
+
     lv_display_flush_ready(disp);
 }
 

@@ -22,7 +22,7 @@ include $(LVGL_DIR)/lvgl.mk
 SRC_FILES = $(CSRCS) $(CPPSRCS)
 SRC_FILES += src/main.cpp src/ui.cpp src/data_manager.cpp src/splash.cpp \
              src/store.cpp src/settings.cpp src/app_manager.cpp src/cJSON.c \
-             src/input_handler.cpp src/kernel.c
+             src/input_handler.cpp src/kernel.c src/audio_manager.cpp
 
 OBJ_FILES = $(SRC_FILES:.cpp=.o)
 OBJ_FILES := $(OBJ_FILES:.c=.o)

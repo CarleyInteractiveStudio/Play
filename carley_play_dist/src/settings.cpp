@@ -1,97 +1,61 @@
-/**
- * @file settings.cpp
- * @brief Implementación de las funciones para la pantalla de Ajustes.
- */
-
 #include "settings.h"
-#include "app_manager.h" // Incluimos el nuevo gestor de aplicaciones.
+#include "ui.h"
+#include "app_manager.h"
 
-// --- MANEJADORES DE EVENTOS ---
-
-/**
- * @brief Manejador de eventos para el botón del gestor de aplicaciones.
- */
-static void app_manager_button_event_handler(lv_event_t *e)
+static void app_manager_event_handler(lv_event_t * e)
 {
     app_manager_show_screen();
 }
 
-/**
- * @brief Manejador de eventos para el botón "Atrás" de la pantalla de ajustes.
- *
- * Cierra la pantalla actual (ajustes) y vuelve a la anterior (la lista de juegos).
- */
-static void settings_back_button_event_handler(lv_event_t *e)
+static void back_event_handler(lv_event_t * e)
 {
-    lv_obj_t *screen_to_close = (lv_obj_t *)lv_event_get_user_data(e);
-    lv_obj_del_async(screen_to_close); // Elimina la pantalla de forma asíncrona.
+    lv_obj_t * main_screen = lv_obj_create(NULL);
+    ui_create_game_list(main_screen);
+    lv_scr_load_anim(main_screen, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 300, 0, true);
 }
 
-// --- IMPLEMENTACIÓN DE FUNCIONES ---
-
-/**
- * @brief Muestra la pantalla de ajustes.
- *
- * Crea una nueva pantalla y la puebla con widgets de configuración de ejemplo.
- */
 void settings_show_screen(void)
 {
-    // Crear una nueva pantalla.
-    lv_obj_t *screen = lv_obj_create(NULL);
-    lv_obj_set_style_bg_color(screen, lv_color_hex(0x000030), LV_PART_MAIN);
+    lv_obj_t * screen = lv_obj_create(NULL);
+    lv_obj_set_style_bg_color(screen, lv_color_hex(0x202020), LV_PART_MAIN);
 
-    // Crear un título
-    lv_obj_t *title = lv_label_create(screen);
-    lv_label_set_text(title, "Ajustes");
-    lv_obj_set_style_text_color(title, lv_color_hex(0xFFFFFF), LV_PART_MAIN);
-    lv_obj_set_style_text_font(title, &lv_font_montserrat_22, LV_PART_MAIN);
-    lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 10);
+    lv_obj_t * title = lv_label_create(screen);
+    lv_label_set_text(title, "Ajustes de Carley Play");
+    lv_obj_set_style_text_font(title, &lv_font_montserrat_28, LV_PART_MAIN);
+    lv_obj_align(title, LV_ALIGN_TOP_MID, 0, 20);
 
-    // Crear un contenedor para los elementos de ajuste
-    lv_obj_t *cont = lv_obj_create(screen);
-    lv_obj_set_size(cont, lv_pct(95), lv_pct(70));
-    lv_obj_align(cont, LV_ALIGN_CENTER, 0, 10);
-    lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN); // Organizar elementos en una columna
-    lv_obj_set_style_bg_color(cont, lv_color_hex(0x000030), LV_PART_MAIN);
-    lv_obj_set_style_border_width(cont, 0, LV_PART_MAIN);
-    lv_obj_set_style_pad_all(cont, 10, LV_PART_MAIN);
+    lv_obj_t * list = lv_list_create(screen);
+    lv_obj_set_size(list, 500, 400);
+    lv_obj_center(list);
 
-    // --- Opción 1: Idioma (Dropdown) ---
-    lv_obj_t *lang_label = lv_label_create(cont);
-    lv_label_set_text(lang_label, "Idioma");
-    lv_obj_set_style_text_color(lang_label, lv_color_hex(0xCCCCCC), LV_PART_MAIN);
+    // Ajuste de Volumen
+    lv_list_add_text(list, "Audio");
+    lv_obj_t * vol_slider = lv_slider_create(list);
+    lv_obj_set_width(vol_slider, 200);
+    lv_slider_set_value(vol_slider, 70, LV_ANIM_OFF);
 
-    lv_obj_t *lang_dd = lv_dropdown_create(cont);
-    lv_dropdown_set_options(lang_dd, "Espanol\nIngles\nPortugues");
-    lv_obj_set_width(lang_dd, lv_pct(90));
+    // Ajuste de Idioma
+    lv_list_add_text(list, "Idioma");
+    lv_obj_t * roller = lv_roller_create(list);
+    lv_roller_set_options(roller, "Español\nEnglish\nPortuguês\nFrançais", LV_ROLLER_MODE_NORMAL);
 
-    // --- Opción 2: Sonido (Switch) ---
-    lv_obj_t *sound_label = lv_label_create(cont);
-    lv_label_set_text(sound_label, "Sonido");
-    lv_obj_set_style_text_color(sound_label, lv_color_hex(0xCCCCCC), LV_PART_MAIN);
-    lv_obj_set_style_pad_top(sound_label, 15, LV_PART_MAIN);
+    // Gestor de Aplicaciones
+    lv_list_add_text(list, "Almacenamiento");
+    lv_obj_t * btn_mgr = lv_list_add_btn(list, LV_SYMBOL_DIRECTORY, "Gestionar Aplicaciones");
+    lv_obj_add_event_cb(btn_mgr, app_manager_event_handler, LV_EVENT_CLICKED, NULL);
 
-    lv_obj_t *sound_switch = lv_switch_create(cont);
+    // Información del Sistema
+    lv_list_add_text(list, "Sistema");
+    lv_list_add_text(list, "Versión: Play OS v1.0 (Bare Metal)");
+    lv_list_add_text(list, "Hardware: Carley Play (GB2)");
+    lv_list_add_text(list, "RAM: 256MB DDR3");
 
-    // --- Botón para el Gestor de Aplicaciones ---
-    lv_obj_t *app_manager_btn = lv_btn_create(cont);
-    lv_obj_set_width(app_manager_btn, lv_pct(90));
-    lv_obj_set_style_pad_top(app_manager_btn, 20, LV_PART_MAIN);
+    // Botón Volver
+    lv_obj_t * back_btn = lv_btn_create(screen);
+    lv_obj_align(back_btn, LV_ALIGN_BOTTOM_MID, 0, -20);
+    lv_obj_t * back_label = lv_label_create(back_btn);
+    lv_label_set_text(back_label, "Volver");
+    lv_obj_add_event_cb(back_btn, back_event_handler, LV_EVENT_CLICKED, NULL);
 
-    lv_obj_t *app_manager_label = lv_label_create(app_manager_btn);
-    lv_label_set_text(app_manager_label, "Gestionar Aplicaciones");
-    lv_obj_center(app_manager_label);
-    lv_obj_add_event_cb(app_manager_btn, app_manager_button_event_handler, LV_EVENT_CLICKED, NULL);
-
-    // Crear un botón de "Atrás"
-    lv_obj_t *back_btn = lv_btn_create(screen);
-    lv_obj_align(back_btn, LV_ALIGN_BOTTOM_LEFT, 10, -10);
-    lv_obj_add_event_cb(back_btn, settings_back_button_event_handler, LV_EVENT_CLICKED, screen);
-
-    lv_obj_t *back_label = lv_label_create(back_btn);
-    lv_label_set_text(back_label, "Atras");
-    lv_obj_center(back_label);
-
-    // Cargar la nueva pantalla
-    lv_disp_load_scr(screen);
+    lv_scr_load_anim(screen, LV_SCR_LOAD_ANIM_MOVE_LEFT, 300, 0, true);
 }
