@@ -1,15 +1,16 @@
-# Carley Play OS v4.0 - "Alive Engine"
+# Carley Play OS v4.5 - "Hyper Optimized"
 
-Esta es la versión más importante hasta la fecha. Los drivers han dejado de ser esqueletos y ahora tienen lógica real para el hardware.
+Esta versión se centra en el rendimiento puro y la reducción de tamaño.
 
-## Cambios en los Drivers (Vida Real):
-1.  **SDMMC real:** Protocolo completo de inicialización para detectar tarjetas SD de cualquier marca.
-2.  **FAT32 Real:** El buscador de archivos ahora navega por los clusters de la tarjeta SD.
-3.  **USB HID real:** Mapeo de botones real para mandos inalámbricos 2.4G.
-4.  **Aceleración RGA:** El motor gráfico 2D ya puede mover bloques de memoria por hardware.
+## Mejoras de Optimización:
+1.  **Compresión LZ4:** Los juegos .pg ahora pueden estar comprimidos. El sistema los descomprime al vuelo en la RAM, ahorrando hasta un 50% de espacio en la SD.
+2.  **Aceleración NEON:** El SDK usa las instrucciones matemáticas vectoriales del Cortex-A7 para mezclas de color ultra-rápidas.
+3.  **Transferencia DMA:** El video ya no consume CPU. El hardware DMA se encarga de mover los píxeles a la pantalla.
+4.  **libcp-mini:** Nuevo runtime que reduce el peso de los ejecutables al mínimo.
 
-## Estado del Sistema:
-La consola ya es capaz de arrancar, leer su catálogo desde la SD y responder a los mandos sin ninguna simulación.
+## Cambios en el SDK:
+- `cp_alpha_blend_neon(...)`: Mezcla de imágenes por hardware.
+- `pg-pack --compress`: Opción para crear juegos comprimidos.
 
 ---
 **Desarrollado para CP - Carley Play**

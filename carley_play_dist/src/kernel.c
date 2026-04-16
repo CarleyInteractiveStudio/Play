@@ -108,8 +108,14 @@ void kernel_init_video(void) {
 void kernel_flush_area(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map) {
     uint32_t * fb = (uint32_t *)FB_ADDR;
     int32_t area_width = lv_area_get_width(area);
+
+    // Uso de DMA para copias rápidas (Canal 0)
     for(int32_t y = area->y1; y <= area->y2; y++) {
-        memcpy(&fb[y * 1280 + area->x1], &px_map[(y - area->y1) * area_width * 4], area_width * 4);
+        RK_REG(DMA_SRC(0)) = (uint32_t)&px_map[(y - area->y1) * area_width * 4];
+        RK_REG(DMA_DST(0)) = (uint32_t)&fb[y * 1280 + area->x1];
+        RK_REG(DMA_LEN(0)) = area_width * 4;
+        RK_REG(DMA_CTRL) |= 0x1; // Iniciar transferencia
+        while(RK_REG(DMA_CTRL) & 0x1); // Esperar a DMA
     }
     lv_display_flush_ready(disp);
 }

@@ -58,6 +58,13 @@
 #define RTC_READ_TIME     (RTC_BASE + 0x0004)
 #define RTC_CTRL          (RTC_BASE + 0x0010)
 
+// --- DMA Controller ---
+#define DMA_BASE          0x20018000
+#define DMA_CTRL          (DMA_BASE + 0x0000)
+#define DMA_SRC(n)        (DMA_BASE + 0x0100 + (n) * 0x20)
+#define DMA_DST(n)        (DMA_BASE + 0x0104 + (n) * 0x20)
+#define DMA_LEN(n)        (DMA_BASE + 0x0108 + (n) * 0x20)
+
 // --- Mali-400 GPU ---
 #define MALI_BASE         0x10090000
 #define MALI_GPU_ID       (MALI_BASE + 0x0000)
