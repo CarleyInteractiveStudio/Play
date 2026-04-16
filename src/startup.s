@@ -12,7 +12,7 @@ _start:
     ldr pc, prefetch_addr
     ldr pc, abort_addr
     nop
-    ldr pc, irq_addr
+    ldr pc, irq_ptr
     ldr pc, fiq_addr
 
 reset_addr:     .word reset_handler
@@ -20,7 +20,7 @@ undef_addr:     .word loop
 swi_addr:       .word loop
 prefetch_addr:  .word loop
 abort_addr:     .word loop
-irq_addr:       .word loop
+irq_ptr:        .word irq_handler
 fiq_addr:       .word loop
 
 loop: b loop
@@ -42,3 +42,14 @@ bss_loop:
     /* 3. Saltar al punto de entrada del kernel */
     bl _startup_entry
     b loop
+
+irq_handler:
+    /* Guardar registros del hilo actual */
+    sub lr, lr, #4
+    stmfd sp!, {r0-r12, lr}
+
+    /* Llamar al manejador de interrupciones en C */
+    bl gic_handler
+
+    /* Restaurar registros y volver */
+    ldmfd sp!, {r0-r12, pc}^

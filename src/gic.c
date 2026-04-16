@@ -21,3 +21,21 @@ void gic_enable_interrupt(uint32_t irq)
     uint32_t bit = irq % 32;
     *(volatile uint32_t *)GICD_ISENABLER(n) = (1 << bit);
 }
+
+#define GICC_IAR             (GIC_CPU_BASE + 0x00C)
+#define GICC_EOIR            (GIC_CPU_BASE + 0x010)
+
+extern "C" void gic_handler(void)
+{
+    // 1. Obtener ID de la interrupción
+    uint32_t iar = *(volatile uint32_t *)GICC_IAR;
+    uint32_t irq_id = iar & 0x3FF;
+
+    if(irq_id == 32) { // Ejemplo ID de Timer
+        extern void kernel_timer_irq(void);
+        kernel_timer_irq();
+    }
+
+    // 2. Notificar fin de interrupción
+    *(volatile uint32_t *)GICC_EOIR = iar;
+}

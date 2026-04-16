@@ -6,8 +6,8 @@ CC = arm-none-eabi-gcc
 CXX = arm-none-eabi-g++
 OBJCOPY = arm-none-eabi-objcopy
 
-# Parámetros de Optimización para ARM
-ARCH_FLAGS = -mcpu=arm926ej-s -marm
+# Parámetros de Optimización para ARM (Cortex-A7 RK3128)
+ARCH_FLAGS = -mcpu=cortex-a7 -mthumb -mfloat-abi=hard -mfpu=neon-vfpv4
 OPTIMIZATION = -O3 -ffunction-sections -fdata-sections
 CFLAGS = $(ARCH_FLAGS) $(OPTIMIZATION) -I. -I./src -I./lvgl -Wall
 CXXFLAGS = $(CFLAGS) -std=c++11 -fno-exceptions -fno-rtti
@@ -28,7 +28,9 @@ SRC_FILES += src/main.cpp src/ui.cpp src/data_manager.cpp src/splash.cpp \
              src/file_explorer.cpp src/config_manager.cpp src/gpu_mali.cpp \
              src/audio_mixer.cpp src/carley_bridge.cpp src/carley_net.cpp \
              src/vpu_rk.c src/user_manager.cpp src/gles_wrapper.cpp \
-             src/carley_sync.cpp src/pmu_rk.c
+             src/carley_sync.cpp src/pmu_rk.c src/scheduler.cpp src/vfs.cpp \
+             src/cp_math.cpp src/cp_physics.cpp src/creative_bridge.cpp \
+             src/usb_hid.c
 
 OBJ_FILES = $(SRC_FILES:.cpp=.o)
 OBJ_FILES := $(OBJ_FILES:.c=.o)

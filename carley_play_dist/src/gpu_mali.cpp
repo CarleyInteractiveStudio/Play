@@ -2,7 +2,7 @@
 #include "rk3128_regs.h"
 
 // Dirección reservada para texturas y buffers de video
-#define VRAM_START 0x08000000 // A partir de los 128MB
+#define VRAM_START 0x68000000 // A partir de los 128MB
 static uint32_t vram_ptr = VRAM_START;
 
 void gpu_init(void)
@@ -27,5 +27,13 @@ void cp_gpu_load_shader(const char * vcode, const char * fcode)
 
 void cp_gpu_draw_mesh(cp_vertex_t * vertices, uint32_t count, cp_texture_t * tex)
 {
-    // Enviar comandos al procesador de geometría y fragmentos de la GPU
+    // 1. Preparar lista de comandos Mali (Mali-400 usa Job Manager)
+    uint32_t job_addr = (uint32_t)vram_alloc(1024);
+
+    // 2. Configurar registros de la GPU para procesar el dibujo
+    RK_REG(MALI_BASE + 0x0020) = (uint32_t)vertices; // Geometry base
+    RK_REG(MALI_BASE + 0x0024) = count;              // Vertex count
+
+    // 3. Disparar trabajo de la GPU
+    RK_REG(MALI_BASE + 0x0008) = 0x1; // Start job
 }

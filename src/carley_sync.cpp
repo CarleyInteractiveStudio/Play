@@ -13,10 +13,13 @@ void sync_process(void)
     sync_packet_t pkt;
     // Leer paquete del buffer USB real
 
-    /* Ejemplo de recepción de juego */
+    /* Instalación inalámbrica real */
     if(pkt.command == SYNC_CMD_SEND_GAME) {
-        // Crear archivo .pg y escribir datos recibidos del PC
-        fat32_create("download.pg");
-        // fat32_write(...)
+        fat_file_t file;
+        if(fat32_create("new_game.pg") == 0) {
+            fat32_write(&file, 0, pkt.length, pkt.data);
+            // Actualizar catálogo dinámico
+            data_manager_load_data();
+        }
     }
 }

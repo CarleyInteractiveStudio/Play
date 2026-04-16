@@ -11,6 +11,16 @@
 #include <stdint.h>
 #include <string.h>
 
+// --- SOPORTE C++ RUNTIME (new/delete) ---
+void* operator new(size_t size) { return malloc(size); }
+void* operator new[](size_t size) { return malloc(size); }
+void operator delete(void* p) { free(p); }
+void operator delete[](void* p) { free(p); }
+void operator delete(void* p, size_t size) { free(p); }
+void operator delete[](void* p, size_t size) { free(p); }
+
+extern "C" void __cxa_pure_virtual() { while (1); }
+
 // --- GESTIÓN DE MEMORIA DINÁMICA (Heap Avanzado) ---
 #define HEAP_SIZE (64 * 1024 * 1024) // 64MB de Heap para LVGL y otros
 static uint8_t heap[HEAP_SIZE];
@@ -98,7 +108,7 @@ void kernel_init_system(void) {
     kernel_init_malloc();
 }
 
-#define FB_ADDR 0x01000000
+#define FB_ADDR 0x61000000
 void kernel_init_video(void) {
     VOP_REG(VOP_WIN0_YRGB_MST) = FB_ADDR;
     VOP_REG(VOP_SYS_CTRL) |= (1 << 0);
