@@ -45,7 +45,10 @@ void loader_run_game(uint32_t lba, uint32_t size_sectors, uint32_t load_addr)
         }
     }
 
-    // 4. Configurar puntero de pila y saltar
+    // 4. Cargar librerías compartidas .cpl si el juego las requiere
+    // dynamic_linker_resolve(header);
+
+    // 5. Configurar puntero de pila y saltar
     // __asm__ volatile ("mov sp, %0" : : "r" (0x0FFFFFFF));
 
     game_entry_t start_game = (game_entry_t)load_addr;

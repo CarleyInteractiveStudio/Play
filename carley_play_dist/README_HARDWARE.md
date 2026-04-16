@@ -1,17 +1,15 @@
-# Carley Play OS v7.0 - "Industrial Grade"
+# Carley Play OS v8.0 - "Platform Consolidation"
 
-Esta versión marca la transición de la consola a un ecosistema de desarrollo profesional.
+Esta versión convierte a Carley Play en una plataforma robusta y segura para el desarrollo masivo.
 
-## Cambios de Arquitectura (Nivel Industrial):
-1.  **Migración Cortex-A7:** Todo el sistema ahora corre nativamente en la arquitectura A7 con soporte NEON y VFP.
-2.  **DDR Real (0x60000000):** Se han ajustado las direcciones de memoria a la ubicación real de la RAM en el chip RK3128.
-3.  **Creative Bridge:** Capa de soporte directo para tu motor propio 'Creative Engine'.
-4.  **USB HID Completo:** El sistema ahora puede entender cualquier mando inalámbrico mediante el análisis de descriptores HID.
-5.  **Instalación OTA (Inalámbrica):** Capacidad de recibir y grabar juegos en la SD mediante el programa de PC.
+## Novedades de la Plataforma:
+1.  **Protección de Memoria (MMU):** El kernel ahora aísla la memoria del juego de la del sistema. Un error en el juego ya no colgará la consola.
+2.  **Librerías Compartidas (.cpl):** Sistema de enlazado dinámico para ahorrar espacio en la tarjeta SD.
+3.  **Compilador de Shaders:** Herramienta `cp-shc.py` para facilitar el desarrollo de gráficos 3D en Creative Engine.
 
-## Notas para Desarrolladores:
-- Usa el `toolchain.cmake` actualizado para tus proyectos de motor.
-- Implementa `creative_run()` en tu motor para integrarlo al instante.
+## SDK Actualizado:
+- `mmu_init()`: Activa la protección de hardware.
+- `tools/cp-shc.py`: Compila tus efectos visuales.
 
 ---
 **Desarrollado para CP - Carley Play**
