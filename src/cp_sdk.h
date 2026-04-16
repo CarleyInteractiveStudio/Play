@@ -37,7 +37,21 @@ void cp_play_pcm(const uint8_t * data, uint32_t size);
 int cp_save_data(const char* key, const void* data, uint32_t size);
 int cp_load_data(const char* key, void* data, uint32_t size);
 
-// --- GPU ACCELERATION ---
-void cp_gpu_draw_tri(float x1, float y1, float x2, float y2, float x3, float y3, uint32_t color);
+// --- 3D GPU ENGINE (Mali-400) ---
+typedef struct {
+    float x, y, z;
+    float u, v;
+    uint32_t color;
+} cp_vertex_t;
+
+typedef struct {
+    uint8_t * data;
+    uint32_t width;
+    uint32_t height;
+    uint8_t format;
+} cp_texture_t;
+
+void cp_gpu_draw_mesh(cp_vertex_t * vertices, uint32_t count, cp_texture_t * tex);
+void cp_gpu_set_matrix(float * matrix); // 4x4 matrix
 
 #endif // CP_SDK_H

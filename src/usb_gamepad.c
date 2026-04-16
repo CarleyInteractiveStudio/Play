@@ -22,18 +22,18 @@ void usb_host_init(void)
 
 void kernel_get_gamepad_state(cp_gamepad_state_t * state)
 {
-    // Escaneo real de botones (Mapeo genérico para mandos 2.4G)
-    // En un sistema real, leeríamos el canal de datos HID del controlador
+    // Jugador 1
+    state->up = false;
+    state->down = false;
+    state->left = false;
+    state->right = false;
+    state->ok = false;
+    state->back = false;
+}
 
-    /* Simulación de lectura de registros USB reales */
-    uint32_t status = RK_REG(USB_HAINT);
-
-    // Si hay datos en el canal del mando...
-    if(status & 0x1) {
-        // Leeríamos el buffer de datos USB
-        // Por ahora, dejamos el esqueleto listo para el dongle
-    }
-
+void cp_get_gamepad2_state(cp_gamepad_state_t * state)
+{
+    // Jugador 2
     state->up = false;
     state->down = false;
     state->left = false;
