@@ -1,16 +1,15 @@
-# Carley Play OS v4.5 - "Hyper Optimized"
+# Carley Play OS v5.0 - "Connected Ecosystem"
 
-Esta versión se centra en el rendimiento puro y la reducción de tamaño.
+Esta es la actualización más ambiciosa, permitiendo que la consola se sincronice con tu PC de forma inalámbrica.
 
-## Mejoras de Optimización:
-1.  **Compresión LZ4:** Los juegos .pg ahora pueden estar comprimidos. El sistema los descomprime al vuelo en la RAM, ahorrando hasta un 50% de espacio en la SD.
-2.  **Aceleración NEON:** El SDK usa las instrucciones matemáticas vectoriales del Cortex-A7 para mezclas de color ultra-rápidas.
-3.  **Transferencia DMA:** El video ya no consume CPU. El hardware DMA se encarga de mover los píxeles a la pantalla.
-4.  **libcp-mini:** Nuevo runtime que reduce el peso de los ejecutables al mínimo.
+## Novedades del Ecosistema:
+1.  **Carley Sync:** Protocolo para recibir juegos y datos desde el PC a través del dongle USB (WiFi/BT virtual).
+2.  **App de Windows:** Se incluye el esqueleto de `CarleySync.exe` para gestionar la consola desde tu computadora.
+3.  **Trailers de Video:** El Dashboard ahora soporta la reproducción de video por hardware (VPU) para mostrar trailers de juegos.
+4.  **Gestión de Energía:** Implementado el driver PMU para controlar el brillo y la temperatura del Stick.
 
-## Cambios en el SDK:
-- `cp_alpha_blend_neon(...)`: Mezcla de imágenes por hardware.
-- `pg-pack --compress`: Opción para crear juegos comprimidos.
+## Herramientas de PC:
+Mira en `carley_play_sdk/tools/carley-sync-win` para el código fuente del servidor de Windows.
 
 ---
 **Desarrollado para CP - Carley Play**

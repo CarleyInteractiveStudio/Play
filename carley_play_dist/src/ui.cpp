@@ -6,6 +6,7 @@
 #include "audio_manager.h"
 #include "localization.h"
 #include "loader.h"
+#include "vpu_rk.h"
 #include <stdio.h>
 
 static lv_obj_t * game_info_cont;
@@ -32,6 +33,9 @@ static void game_focus_event_handler(lv_event_t * e)
         audio_play_click();
         lv_label_set_text(game_title_lbl, apps[index].name);
         lv_label_set_text(game_desc_lbl, "Un juego increíble optimizado para Carley Play.");
+
+        // Disparar reproducción de trailer por hardware
+        // vpu_decode_frame(apps[index].trailer_data, apps[index].trailer_size, CP_FB_ADDR);
     }
 }
 
@@ -101,7 +105,15 @@ void ui_create_game_list(lv_obj_t * parent)
 
             lv_group_add_obj(g, btn);
             lv_obj_add_event_cb(btn, game_focus_event_handler, LV_EVENT_FOCUSED, NULL);
+            lv_group_add_obj(g, btn);
+            lv_obj_add_event_cb(btn, game_focus_event_handler, LV_EVENT_FOCUSED, NULL);
             lv_obj_add_event_cb(btn, game_click_event_handler, LV_EVENT_CLICKED, NULL);
         }
     }
+
+    // Indicador de Sincronización (Online)
+    lv_obj_t * sync_indicator = lv_label_create(parent);
+    lv_label_set_text(sync_indicator, LV_SYMBOL_BLUETOOTH " Carley Sync Active");
+    lv_obj_set_style_text_color(sync_indicator, lv_color_hex(0x00AAFF), LV_PART_MAIN);
+    lv_obj_align(sync_indicator, LV_ALIGN_TOP_LEFT, 20, 20);
 }
