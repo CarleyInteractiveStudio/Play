@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# cp-cc: Compilador de Carley Play
+
+SDK_PATH=$(dirname $(readlink -f $0))/..
+CC="arm-none-eabi-gcc"
+FLAGS="-mcpu=cortex-a7 -mfloat-abi=hard -mfpu=neon-vfpv4 -O3 -nostartfiles -T $SDK_PATH/include/link.ld"
+INCLUDES="-I$SDK_PATH/include"
+LIBS="-L$SDK_PATH/lib -lcp"
+
+if [ $# -lt 1 ]; then
+    echo "Uso: cp-cc <archivo.c> -o <salida.pg>"
+    exit 1
+fi
+
+# 1. Compilar a binario temporal
+$CC $FLAGS $INCLUDES "$@" $LIBS -o temp_game.bin
+
+# 2. Empaquetar a .pg
+python3 $SDK_PATH/tools/pg-pack.py "Nuevo Juego" "CP Developer" temp_game.bin "" "${@: -1}"
+
+rm temp_game.bin
+echo "Compilación completada con éxito."
