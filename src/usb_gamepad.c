@@ -25,7 +25,7 @@ void kernel_get_gamepad_state(cp_gamepad_state_t * state)
     // En un sistema real, leeríamos el buffer de interrupción del core USB
     // Aquí implementamos el mapeo de bits típico de un mando clon 2.4G
 
-    uint32_t usb_data = USB_HCREG(0x500); // Dirección ficticia para datos de entrada
+    uint32_t usb_data = USB_HCREG(0x500);  para datos de entrada
 
     state->up    = (usb_data & (1 << 0));
     state->down  = (usb_data & (1 << 1));

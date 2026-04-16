@@ -24,6 +24,11 @@ int mixer_play(const uint8_t * data, uint32_t size, bool loop)
     return -1;
 }
 
+void mixer_play_mp3(const uint8_t * data, uint32_t size)
+{
+    // Llamar a librería dr_mp3 o similar (Software decoding)
+}
+
 int16_t mixer_process(void)
 {
     int32_t mixed = 0;

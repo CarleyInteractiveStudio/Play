@@ -1,6 +1,7 @@
 #include "store.h"
 #include "data_manager.h"
 #include "ui.h"
+#include "carley_net.h"
 
 void store_show_screen(void)
 {
@@ -20,7 +21,11 @@ void store_show_screen(void)
     const cp_app_t* apps = data_manager_get_apps(&count);
 
     for (int i = 0; i < count; i++) {
-        lv_list_add_btn(list, LV_SYMBOL_PLUS, apps[i].name);
+        lv_obj_t * btn = lv_list_add_btn(list, LV_SYMBOL_DOWNLOAD, apps[i].name);
+        lv_obj_add_event_cb(btn, [](lv_event_t * e) {
+            // Simular descarga real desde servidor
+            net_download_file("http://carley-server.com/game.pg", "new_download.pg");
+        }, LV_EVENT_CLICKED, NULL);
     }
 
     lv_obj_t * back_btn = lv_btn_create(screen);

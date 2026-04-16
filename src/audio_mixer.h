@@ -30,6 +30,11 @@ void mixer_init(void);
 int mixer_play(const uint8_t * data, uint32_t size, bool loop);
 
 /**
+ * @brief Decodifica y reproduce una pista MP3.
+ */
+void mixer_play_mp3(const uint8_t * mp3_data, uint32_t size);
+
+/**
  * @brief Procesa y mezcla el audio de todos los canales.
  * @return Muestra mezclada de 16 bits.
  */

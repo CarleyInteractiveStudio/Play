@@ -30,7 +30,7 @@ SRC_FILES += src/main.cpp src/ui.cpp src/data_manager.cpp src/splash.cpp \
              src/vpu_rk.c src/user_manager.cpp src/gles_wrapper.cpp \
              src/carley_sync.cpp src/pmu_rk.c src/scheduler.cpp src/vfs.cpp \
              src/cp_math.cpp src/cp_physics.cpp src/creative_bridge.cpp \
-             src/usb_hid.c src/mmu.c
+             src/usb_hid.c src/mmu.c src/osd.cpp src/achievement.cpp src/ota.cpp
 
 OBJ_FILES = $(SRC_FILES:.cpp=.o)
 OBJ_FILES := $(OBJ_FILES:.c=.o)
