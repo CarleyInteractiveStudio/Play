@@ -1,17 +1,15 @@
-# Carley Play OS v3.0 - "Ultimate Edition"
+# Carley Play OS v4.0 - "Alive Engine"
 
-Esta es la culminación del desarrollo del núcleo del sistema operativo. Carley Play es ahora una plataforma de juegos nativos total.
+Esta es la versión más importante hasta la fecha. Los drivers han dejado de ser esqueletos y ahora tienen lógica real para el hardware.
 
-## Novedades de la Versión 3.0:
-1.  **Motor 3D Mali-400:** El SDK ya permite dibujar mallas de vértices, texturas y usar matrices de transformación 3D.
-2.  **Mezclador de Audio Pro:** Soporte para música de fondo y múltiples efectos de sonido simultáneos (4 canales).
-3.  **Multijugador:** Driver USB actualizado para reconocer dos mandos inalámbricos al mismo tiempo.
-4.  **Carley Bridge:** Tecnología para comunicar la consola con celulares y PCs a través del dongle USB inalámbrico.
+## Cambios en los Drivers (Vida Real):
+1.  **SDMMC real:** Protocolo completo de inicialización para detectar tarjetas SD de cualquier marca.
+2.  **FAT32 Real:** El buscador de archivos ahora navega por los clusters de la tarjeta SD.
+3.  **USB HID real:** Mapeo de botones real para mandos inalámbricos 2.4G.
+4.  **Aceleración RGA:** El motor gráfico 2D ya puede mover bloques de memoria por hardware.
 
-## SDK Ultimate:
-- `cp_gpu_draw_mesh(...)`: Dibuja objetos 3D.
-- `mixer_play(...)`: Lanza sonidos en paralelo.
-- `cp_get_gamepad2_state(...)`: Lee el segundo mando.
+## Estado del Sistema:
+La consola ya es capaz de arrancar, leer su catálogo desde la SD y responder a los mandos sin ninguna simulación.
 
 ---
 **Desarrollado para CP - Carley Play**

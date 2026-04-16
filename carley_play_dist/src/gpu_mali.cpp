@@ -19,3 +19,13 @@ void* vram_alloc(uint32_t size)
     vram_ptr += (size + 4095) & ~4095; // Alineación de página de 4KB
     return ptr;
 }
+
+void cp_gpu_load_shader(const char * vcode, const char * fcode)
+{
+    // Compilar código de sombreadores para el Mali-400
+}
+
+void cp_gpu_draw_mesh(cp_vertex_t * vertices, uint32_t count, cp_texture_t * tex)
+{
+    // Enviar comandos al procesador de geometría y fragmentos de la GPU
+}

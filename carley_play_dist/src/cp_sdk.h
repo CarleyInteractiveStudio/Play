@@ -54,4 +54,8 @@ typedef struct {
 void cp_gpu_draw_mesh(cp_vertex_t * vertices, uint32_t count, cp_texture_t * tex);
 void cp_gpu_set_matrix(float * matrix); // 4x4 matrix
 
+// --- SHADERS (Mali-400) ---
+void cp_gpu_load_shader(const char * vertex_code, const char * fragment_code);
+void cp_gpu_set_uniform(const char * name, float value);
+
 #endif // CP_SDK_H

@@ -63,6 +63,13 @@ char * strdup(const char * s) {
     return d;
 }
 
+// --- IMPLEMENTACIÓN POSIX LITE ---
+int open(const char *pathname, int flags, ...) { return -1; }
+int close(int fd) { return 0; }
+long read(int fd, void *buf, size_t count) { return 0; }
+long write(int fd, const void *buf, size_t count) { return 0; }
+off_t lseek(int fd, off_t offset, int whence) { return 0; }
+
 uint32_t kernel_get_free_ram(void) {
     uint32_t total_free = 0;
     block_header_t *curr = free_list;
@@ -117,8 +124,22 @@ void kernel_init_timer(void) {
 }
 
 uint32_t lv_tick_get_cb(void) {
-    static uint32_t ms = 0;
-    return ms++;
+    // Leemos el registro de cuenta actual del Timer del RK3128
+    // Dividimos por la frecuencia (ej: 24MHz) para obtener ms reales
+    uint32_t current_count = TIMER_REG(0x0000);
+    static uint32_t last_count = 0;
+    static uint32_t elapsed_ms = 0;
+
+    if (last_count == 0) last_count = current_count;
+
+    // El timer suele ser decreciente
+    uint32_t diff = last_count - current_count;
+    if (diff >= 24000) { // 1ms a 24MHz
+        elapsed_ms += (diff / 24000);
+        last_count = current_count;
+    }
+
+    return elapsed_ms;
 }
 
 extern void uart_init(void);
