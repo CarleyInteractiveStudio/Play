@@ -16,14 +16,15 @@ static lv_obj_t * game_icon_img;
 
 static void game_click_event_handler(lv_event_t * e)
 {
-    int index = (intptr_t)lv_obj_get_user_data(lv_event_get_target(e));
+    lv_obj_t * obj = (lv_obj_t *)lv_event_get_target(e);
+    int index = (intptr_t)lv_obj_get_user_data(obj);
     // Cargar juego real desde el sector asignado (ejemplo sector 1000)
     loader_run_game(1000 + (index * 5000), 5000, 0x02000000);
 }
 
 static void game_focus_event_handler(lv_event_t * e)
 {
-    lv_obj_t * btn = lv_event_get_target(e);
+    lv_obj_t * btn = (lv_obj_t *)lv_event_get_target(e);
     int index = (intptr_t)lv_obj_get_user_data(btn);
 
     int count = 0;

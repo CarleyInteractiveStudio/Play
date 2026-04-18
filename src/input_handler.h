@@ -36,6 +36,12 @@ void cp_gamepad_read(lv_indev_t * indev, lv_indev_data_t * data);
 /**
  * @brief Obtiene el estado del segundo jugador.
  */
+#ifdef __cplusplus
+extern "C" {
+#endif
 void cp_get_gamepad2_state(cp_gamepad_state_t * state);
+#ifdef __cplusplus
+}
+#endif
 
 #endif // INPUT_HANDLER_H

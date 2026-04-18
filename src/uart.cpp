@@ -10,7 +10,7 @@
 #define UART_THR          (UART0_BASE + 0x0000)
 #define UART_LSR          (UART0_BASE + 0x0014)
 
-void uart_init(void)
+extern "C" void uart_init(void)
 {
     // Configurar baudios a 115200 (Asumiendo reloj UART de 24MHz)
     // 1. Configurar IOMUX para UART0
@@ -30,7 +30,7 @@ void uart_putc(char c)
     RK_REG(UART_THR) = c;
 }
 
-void uart_print(const char* s)
+extern "C" void uart_print(const char* s)
 {
     while(*s) uart_putc(*s++);
 }
