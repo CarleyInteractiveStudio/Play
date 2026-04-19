@@ -1,4 +1,5 @@
 #include "audio_manager.h"
+#include "rk3128_regs.h"
 #include <stdint.h>
 
 // --- SONIDO DE CLICK EMBEBIDO (8-bit PCM, 8000Hz, 0.1s) ---

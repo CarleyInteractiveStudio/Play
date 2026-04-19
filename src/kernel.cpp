@@ -73,12 +73,6 @@ char * strdup(const char * s) {
     return d;
 }
 
-// --- IMPLEMENTACIÓN POSIX LITE ---
-int open(const char *pathname, int flags, ...) { return -1; }
-int close(int fd) { return 0; }
-long read(int fd, void *buf, size_t count) { return 0; }
-long write(int fd, const void *buf, size_t count) { return 0; }
-off_t lseek(int fd, off_t offset, int whence) { return 0; }
 
 uint32_t kernel_get_free_ram(void) {
     uint32_t total_free = 0;
@@ -115,7 +109,7 @@ void kernel_init_video(void) {
     VOP_REG(VOP_REG_DONE_EN) |= (1 << 0);
 }
 
-void kernel_flush_area(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map) {
+extern "C" void kernel_flush_area(lv_display_t * disp, const lv_area_t * area, uint8_t * px_map) {
     uint32_t * fb = (uint32_t *)FB_ADDR;
     int32_t area_width = lv_area_get_width(area);
 
@@ -158,10 +152,10 @@ uint32_t lv_tick_get_cb(void) {
     return elapsed_ms;
 }
 
-extern void uart_init(void);
-extern void uart_print(const char* s);
+extern "C" void uart_init(void);
+extern "C" void uart_print(const char* s);
 
-void kernel_init_hardware(void) {
+extern "C" void kernel_init_hardware(void) {
     kernel_init_system();
     uart_init();
     uart_print("Carley Play OS Booting...\n");
@@ -170,8 +164,29 @@ void kernel_init_hardware(void) {
     RK_REG(0x2003c010) |= 1;
 }
 
-void _startup_entry(void) {
+extern "C" void _startup_entry(void) {
     extern int main(void);
     main();
     while(1);
 }
+
+extern "C" {
+void _exit(int status) { while(1); }
+int _close(int fd) { return -1; }
+int _lseek(int fd, int ptr, int dir) { return 0; }
+int _read(int fd, char *ptr, int len) { return 0; }
+int _write(int fd, char *ptr, int len) { return 0; }
+int _fstat(int fd, void *st) { return 0; }
+int _isatty(int fd) { return 1; }
+int _getpid(void) { return 1; }
+int _kill(int pid, int sig) { return -1; }
+void * _sbrk(int incr) {
+    static uint8_t *heap_end = NULL;
+    uint8_t *prev_heap_end;
+    if (heap_end == NULL) heap_end = (uint8_t*)0x64000000;
+    prev_heap_end = heap_end;
+    heap_end += incr;
+    return (void *)prev_heap_end;
+}
+}
+extern "C" void kernel_timer_irq(void) {}

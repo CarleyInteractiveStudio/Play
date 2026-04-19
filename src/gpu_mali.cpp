@@ -1,5 +1,6 @@
 #include "gpu_mali.h"
 #include "rk3128_regs.h"
+#include "cp_sdk.h"
 
 // Dirección reservada para texturas y buffers de video
 #define VRAM_START 0x68000000 // A partir de los 128MB

@@ -1,6 +1,7 @@
 #include "carley_sync.h"
 #include "usb_gamepad.h" // Supongamos que aquí está la lectura de datos USB
 #include "fat32.h"
+#include "data_manager.h"
 #include <string.h>
 
 void sync_init(void)
