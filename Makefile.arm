@@ -1,0 +1,65 @@
+# Makefile para Carley Play (Play OS)
+# Arquitectura: ARM (GB2 / Bare Metal)
+
+# Compilador Cruzado
+CC = arm-none-eabi-gcc
+CXX = arm-none-eabi-g++
+OBJCOPY = arm-none-eabi-objcopy
+
+# Parámetros de Optimización para ARM (Cortex-A7 RK3128)
+ARCH_FLAGS = -mcpu=cortex-a7 -mthumb -mfloat-abi=hard -mfpu=neon-vfpv4
+OPTIMIZATION = -O3 -ffunction-sections -fdata-sections
+CFLAGS = $(ARCH_FLAGS) $(OPTIMIZATION) -I. -I./src -I./lvgl -Wall
+CXXFLAGS = $(CFLAGS) -std=c++11 -fno-exceptions -fno-rtti
+
+# Enlazado (Bare Metal - Ajustar según el mapa de memoria del kernel)
+LDFLAGS = -Wl,--gc-sections -nostartfiles -T link.ld
+
+# Archivos de Fuente
+LVGL_DIR = lvgl
+include $(LVGL_DIR)/lvgl.mk
+
+SRC_FILES = $(CSRCS) $(CPPSRCS)
+SRC_FILES += src/main.cpp src/ui.cpp src/data_manager.cpp src/splash.cpp \
+             src/store.cpp src/settings.cpp src/app_manager.cpp src/cJSON.c \
+             src/input_handler.cpp src/kernel.c src/audio_manager.cpp \
+             src/startup.s src/localization.cpp src/sdmmc.c src/usb_gamepad.c \
+             src/fat32.cpp src/loader.cpp src/uart.c src/gic.c src/rga.c \
+             src/file_explorer.cpp src/config_manager.cpp src/gpu_mali.cpp \
+             src/audio_mixer.cpp src/carley_bridge.cpp src/carley_net.cpp \
+             src/vpu_rk.c src/user_manager.cpp src/gles_wrapper.cpp \
+             src/carley_sync.cpp src/pmu_rk.c src/scheduler.cpp src/vfs.cpp \
+             src/cp_math.cpp src/cp_physics.cpp src/creative_bridge.cpp \
+             src/usb_hid.c src/mmu.c src/osd.cpp src/achievement.cpp src/ota.cpp
+
+OBJ_FILES = $(SRC_FILES:.cpp=.o)
+OBJ_FILES := $(OBJ_FILES:.c=.o)
+
+# Nombre del archivo final
+TARGET = play_os.elf
+BINARY = play_os.bin
+
+all: $(TARGET) $(BINARY)
+
+$(TARGET): $(OBJ_FILES)
+	@echo "Enlazando para ARM..."
+	$(CXX) $(OBJ_FILES) $(LDFLAGS) -o $@
+
+$(BINARY): $(TARGET)
+	@echo "Generando binario listo para el hardware..."
+	$(OBJCOPY) -O binary $< $@
+
+%.o: %.c
+	@echo "Compilando C: $<"
+	$(CC) $(CFLAGS) -c $< -o $@
+
+%.o: %.cpp
+	@echo "Compilando C++: $<"
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+%.o: %.s
+	@echo "Ensamblando: $<"
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJ_FILES) $(TARGET) $(BINARY)
